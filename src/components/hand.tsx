@@ -2,17 +2,41 @@ import React from "react";
 import {
   DndContext,
   PointerSensor,
+  KeyboardSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { type Ranks, type Suits, type CardId } from "../types";
 import {
   SortableContext,
   arrayMove,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { type Ranks, type Suits, type CardId } from "../types";
 import { Droppable } from "./droppable";
 import { Card } from "./card";
+
+function calculateCardRotation(idx: number, total: number) {
+  const isEven = total % 2 === 0;
+
+  const half = total / 2;
+
+  const distance = (() => {
+    if (isEven && idx - half >= 0) {
+      return idx - half + 1;
+    }
+
+    return Math.round(idx - half);
+  })();
+
+  const rotation = distance * 3;
+
+  const translate = Math.abs(distance) ** 2 * 3;
+
+  return {
+    rotation,
+    translate,
+  };
+}
 
 export function Hand() {
   const [cards, setCards] = React.useState<Array<[Ranks, Suits]>>([
@@ -28,17 +52,18 @@ export function Hand() {
     ["5", "H"],
   ]);
 
-  const [selectedCards, _selectCards] = React.useState<Array<CardId>>([]);
+  const [selectedCards, setSeletedCards] = React.useState<Array<CardId>>([]);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 10,
       },
     }),
+    useSensor(KeyboardSensor),
   );
 
   const selectCards = (cardId: CardId) => {
-    _selectCards((s) => {
+    setSeletedCards((s) => {
       if (s.includes(cardId)) {
         return s.filter((i) => i !== cardId);
       }
@@ -100,27 +125,4 @@ export function Hand() {
       </Droppable>
     </DndContext>
   );
-}
-
-function calculateCardRotation(idx: number, total: number) {
-  const isEven = total % 2 === 0;
-
-  const half = total / 2;
-
-  const distance = (() => {
-    if (isEven && idx - half >= 0) {
-      return idx - half + 1;
-    }
-
-    return Math.round(idx - half);
-  })();
-
-  const rotation = distance * 3;
-
-  const translate = Math.pow(Math.abs(distance), 2) * 3;
-
-  return {
-    rotation,
-    translate,
-  };
 }

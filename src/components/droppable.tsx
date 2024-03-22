@@ -5,7 +5,7 @@ export type DroppableProps = {
   className?: string;
 };
 
-export function Droppable(props: DroppableProps) {
+export function Droppable({ children, ...props }: DroppableProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: "droppable",
   });
@@ -16,7 +16,7 @@ export function Droppable(props: DroppableProps) {
 
   return (
     <div ref={setNodeRef} style={style} {...props}>
-      {props.children}
+      {children}
     </div>
   );
 }

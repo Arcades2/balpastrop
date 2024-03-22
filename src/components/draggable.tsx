@@ -5,7 +5,7 @@ export type DraggableProps = {
   children: React.ReactNode;
 };
 
-export function Draggable(props: DraggableProps) {
+export function Draggable({ children }: DraggableProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: "draggable",
   });
@@ -16,7 +16,7 @@ export function Draggable(props: DraggableProps) {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {props.children}
+      {children}
     </div>
   );
 }
