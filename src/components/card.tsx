@@ -32,9 +32,8 @@ export function Card({ rank, suit, className, style, onClick }: CardProps) {
   return (
     <div
       data-color={["H", "D"].includes(suit) ? "red" : "black"}
-      data-dragging={active?.id === id ? "true" : "false"}
       className={cn(
-        "bg-stone-300 aspect-[62/88] h-[250px] rounded-md data-[color=red]:text-red-800 data-[color=black]:text-stone-900 p-4 flex flex-col justify-between data-[dragging=true]:shadow-lg data-[dragging=false]:shadow-md border-stone-400 border-2",
+        "bg-stone-300 aspect-[62/88] h-[250px] rounded-md data-[color=red]:text-red-800 data-[color=black]:text-stone-900 p-4 flex flex-col justify-between shadow-xl shadow-slate-900",
         className,
       )}
       ref={setNodeRef}
