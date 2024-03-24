@@ -15,4 +15,8 @@ export type Ranks =
 
 export type Suits = "C" | "D" | "H" | "S";
 
+export type SuitColor = "red" | "black";
+
+export type CardDef = readonly [Ranks, Suits];
+
 export type CardId = `${Ranks}${Suits}`;
