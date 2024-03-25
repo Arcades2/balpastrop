@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { CardDef } from "../types";
+import { generateDeck } from "../utils";
 
 type CardState = {
   selectedCards: Array<CardDef>;
@@ -9,31 +10,24 @@ type CardState = {
   actions: {
     setHand: (hand: Array<CardDef>) => void;
     selectCard: (cardId: CardDef) => void;
+    drawCard: () => void;
+    fillHand: () => void;
+  };
+  private: {
     isCardSelected: (cardId: CardDef) => boolean;
   };
 };
 
 export const useCardStore = create<CardState>()((set, get) => ({
   selectedCards: [],
-  deck: [],
+  deck: generateDeck(),
   discardPile: [],
-  hand: [
-    ["A", "H"],
-    ["K", "H"],
-    ["Q", "H"],
-    ["J", "H"],
-    ["10", "H"],
-    ["9", "H"],
-    ["8", "H"],
-    ["7", "H"],
-    ["6", "H"],
-    ["5", "H"],
-  ],
+  hand: [],
   actions: {
     setHand: (hand: Array<CardDef>) => set({ hand }),
     selectCard: (cardDef: CardDef) => {
       set((s) => {
-        if (get().actions.isCardSelected(cardDef)) {
+        if (get().private.isCardSelected(cardDef)) {
           return {
             selectedCards: s.selectedCards.filter(
               (c) => c.join("") !== cardDef.join(""),
@@ -48,6 +42,26 @@ export const useCardStore = create<CardState>()((set, get) => ({
         return { selectedCards: s.selectedCards };
       });
     },
+    drawCard: () => {
+      const { deck, hand } = get();
+
+      if (deck.length === 0) {
+        set({ deck: generateDeck() });
+      }
+
+      const [card, ...rest] = deck;
+      set({ deck: rest, hand: [...hand, card] });
+    },
+    fillHand: () => {
+      const { hand } = get();
+
+      if (hand.length < 8) {
+        get().actions.drawCard();
+        get().actions.fillHand();
+      }
+    },
+  },
+  private: {
     isCardSelected: (cardDef: CardDef) => {
       const { selectedCards } = get();
 

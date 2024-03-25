@@ -14,6 +14,7 @@ import {
 import { Droppable } from "./droppable";
 import { Card } from "./card";
 import { useHand, useCardActions, useSelectedCards } from "../stores/card";
+import { CardDef } from "../types";
 
 function calculateCardRotation(idx: number, total: number) {
   const isEven = total % 2 === 0;
@@ -41,7 +42,12 @@ function calculateCardRotation(idx: number, total: number) {
 export function Hand() {
   const hand = useHand();
   const selectedCards = useSelectedCards();
-  const { setHand, selectCard, isCardSelected } = useCardActions();
+  const { setHand, selectCard, fillHand } = useCardActions();
+
+  const isCardSelected = (cardDef: CardDef) =>
+    selectedCards.findIndex(
+      (c) => c[0] === cardDef[0] && c[1] === cardDef[1],
+    ) !== -1;
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -51,6 +57,10 @@ export function Hand() {
     }),
     useSensor(KeyboardSensor),
   );
+
+  React.useEffect(() => {
+    fillHand();
+  }, [fillHand]);
 
   return (
     <DndContext
