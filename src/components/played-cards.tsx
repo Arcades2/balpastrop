@@ -8,11 +8,13 @@ export function PlayedCards() {
   const pokerHand = guessPokerHand(playedCards);
 
   return (
-    <div className="flex flex-row gap-2">
-      <p className="font-bold">{pokerHand}</p>
-      {playedCards.map(([rank, suit]) => (
-        <Card key={`${rank}${suit}`} rank={rank} suit={suit} />
-      ))}
+    <div className="flex flex-col gap-4 justify-center">
+      <p className="font-bold text-center">{pokerHand}</p>
+      <div className="flex flex-row gap-2">
+        {playedCards.map(([rank, suit]) => (
+          <Card key={`${rank}${suit}`} rank={rank} suit={suit} />
+        ))}
+      </div>
     </div>
   );
 }
