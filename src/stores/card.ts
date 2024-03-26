@@ -4,6 +4,7 @@ import { generateDeck } from "../utils";
 
 type CardState = {
   selectedCards: Array<CardDef>;
+  playedCards: Array<CardDef>;
   hand: Array<CardDef>;
   deck: Array<CardDef>;
   discardPile: Array<CardDef>;
@@ -12,6 +13,7 @@ type CardState = {
     selectCard: (cardId: CardDef) => void;
     drawCard: () => void;
     fillHand: () => void;
+    playSelectedCards: () => void;
   };
   private: {
     isCardSelected: (cardId: CardDef) => boolean;
@@ -20,6 +22,7 @@ type CardState = {
 
 export const useCardStore = create<CardState>()((set, get) => ({
   selectedCards: [],
+  playedCards: [],
   deck: generateDeck(),
   discardPile: [],
   hand: [],
@@ -60,6 +63,22 @@ export const useCardStore = create<CardState>()((set, get) => ({
         get().actions.fillHand();
       }
     },
+    playSelectedCards: () => {
+      set((s) => {
+        const { selectedCards, hand } = s;
+
+        return {
+          hand: hand.filter(
+            (card) =>
+              selectedCards.findIndex(
+                (c) => c[0] === card[0] && c[1] === card[1],
+              ) === -1,
+          ),
+          playedCards: selectedCards,
+          selectedCards: [],
+        };
+      });
+    },
   },
   private: {
     isCardSelected: (cardDef: CardDef) => {
@@ -78,5 +97,6 @@ export const useHand = () => useCardStore((s) => s.hand);
 export const useSelectedCards = () => useCardStore((s) => s.selectedCards);
 export const useDeck = () => useCardStore((s) => s.deck);
 export const useDiscardPile = () => useCardStore((s) => s.discardPile);
+export const usePlayedCards = () => useCardStore((s) => s.playedCards);
 
 export const useCardActions = () => useCardStore((s) => s.actions);
