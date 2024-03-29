@@ -9,12 +9,12 @@ export function Suit({ suit }: SuitProps) {
     return <span className="text-red-800">♥</span>;
   }
   if (suit === "D") {
-    return <span className="text-red-800">♦</span>;
+    return <span className="text-red-600">♦</span>;
   }
   if (suit === "C") {
-    return <span className="text-black">♣</span>;
+    return <span className="text-sky-950">♣</span>;
   }
   if (suit === "S") {
-    return <span className="text-black">♠</span>;
+    return <span className="text-stone-900">♠</span>;
   }
 }

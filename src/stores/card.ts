@@ -14,6 +14,8 @@ type CardState = {
     drawCard: () => void;
     fillHand: () => void;
     playSelectedCards: () => void;
+    cleanPlayedCards: () => void;
+    discardSelectedCards: () => void;
   };
   private: {
     isCardSelected: (cardId: CardDef) => boolean;
@@ -76,6 +78,32 @@ export const useCardStore = create<CardState>()((set, get) => ({
           ),
           playedCards: selectedCards,
           selectedCards: [],
+        };
+      });
+    },
+    cleanPlayedCards: () => {
+      set((s) => {
+        const { playedCards, discardPile } = s;
+
+        return {
+          playedCards: [],
+          discardPile: [...discardPile, ...playedCards],
+        };
+      });
+    },
+    discardSelectedCards: () => {
+      set((s) => {
+        const { selectedCards, hand } = s;
+
+        return {
+          hand: hand.filter(
+            (card) =>
+              selectedCards.findIndex(
+                (c) => c[0] === card[0] && c[1] === card[1],
+              ) === -1,
+          ),
+          selectedCards: [],
+          discardPile: [...s.discardPile, ...selectedCards],
         };
       });
     },
