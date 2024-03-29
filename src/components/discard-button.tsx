@@ -6,7 +6,7 @@ export function DiscardButton() {
   return (
     <button
       type="button"
-      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-32"
+      className="bg-red-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-40 h-20 text-xl"
       onClick={() => {
         discardSelectedCards();
         fillHand();

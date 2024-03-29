@@ -7,7 +7,7 @@ import { DiscardButton } from "./components/discard-button";
 function App() {
   return (
     <div
-      /* className="crt" */
+      className="crt font-balatro"
       style={{
         backgroundImage: "url('/balatro.webp')",
         backgroundSize: "cover",
@@ -18,13 +18,13 @@ function App() {
         <div className="h-1/2 flex items-center justify-center">
           <PlayedCards />
         </div>
-        <div className="h-1/2 flex items-center gap-16">
+        <div className="h-1/2 flex flex-col justify-center gap-16 relative">
           <Hand />
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex justify-center items-center gap-6">
             <PlayButton />
             <DiscardButton />
           </div>
-          <div className="self-end mb-6">
+          <div className="absolute top-1/2 -translate-y-1/2 right-0">
             <Deck />
           </div>
         </div>

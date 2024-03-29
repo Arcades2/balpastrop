@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Balatro";
+  src: url("/public/balatro.ttf");
+}
+
 @keyframes flicker {
   0% {
     opacity: 0.27861;
