@@ -1,6 +1,7 @@
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 import { CardDef } from "../types";
-import { generateDeck } from "../utils";
+import { generateDeck, getPokerHandPoints } from "../utils";
 
 type CardState = {
   selectedCards: Array<CardDef>;
@@ -8,6 +9,10 @@ type CardState = {
   hand: Array<CardDef>;
   deck: Array<CardDef>;
   discardPile: Array<CardDef>;
+  score: number;
+  highestScore: number;
+  playableHands: number;
+  discards: number;
   actions: {
     setHand: (hand: Array<CardDef>) => void;
     selectCard: (cardId: CardDef) => void;
@@ -16,6 +21,7 @@ type CardState = {
     playSelectedCards: () => void;
     cleanPlayedCards: () => void;
     discardSelectedCards: () => void;
+    newGame: () => void;
   };
   private: {
     isCardSelected: (cardId: CardDef) => boolean;
@@ -28,9 +34,15 @@ export const useCardStore = create<CardState>()((set, get) => ({
   deck: generateDeck(),
   discardPile: [],
   hand: [],
+  score: 0,
+  playableHands: 5,
+  discards: 3,
+  highestScore: Number(localStorage.getItem("highestScore")) ?? 0,
   actions: {
     setHand: (hand: Array<CardDef>) => set({ hand }),
     selectCard: (cardDef: CardDef) => {
+      if (get().playableHands === 0 || get().playedCards.length) return;
+
       set((s) => {
         if (get().private.isCardSelected(cardDef)) {
           return {
@@ -69,6 +81,12 @@ export const useCardStore = create<CardState>()((set, get) => ({
       set((s) => {
         const { selectedCards, hand } = s;
 
+        const score = s.score + getPokerHandPoints(selectedCards);
+
+        if (score > s.highestScore) {
+          localStorage.setItem("highestScore", score.toString());
+        }
+
         return {
           hand: hand.filter(
             (card) =>
@@ -78,6 +96,9 @@ export const useCardStore = create<CardState>()((set, get) => ({
           ),
           playedCards: selectedCards,
           selectedCards: [],
+          playableHands: s.playableHands - 1,
+          score,
+          highestScore: Math.max(s.highestScore, score),
         };
       });
     },
@@ -102,10 +123,24 @@ export const useCardStore = create<CardState>()((set, get) => ({
                 (c) => c[0] === card[0] && c[1] === card[1],
               ) === -1,
           ),
+          discards: s.discards - 1,
           selectedCards: [],
           discardPile: [...s.discardPile, ...selectedCards],
         };
       });
+    },
+    newGame: () => {
+      set({
+        selectedCards: [],
+        playedCards: [],
+        deck: generateDeck(),
+        discardPile: [],
+        hand: [],
+        score: 0,
+        playableHands: 5,
+        discards: 3,
+      });
+      get().actions.fillHand();
     },
   },
   private: {
@@ -126,5 +161,14 @@ export const useSelectedCards = () => useCardStore((s) => s.selectedCards);
 export const useDeck = () => useCardStore((s) => s.deck);
 export const useDiscardPile = () => useCardStore((s) => s.discardPile);
 export const usePlayedCards = () => useCardStore((s) => s.playedCards);
+export const useScores = () =>
+  useCardStore(
+    useShallow((s) => ({
+      score: s.score,
+      highestScore: s.highestScore,
+    })),
+  );
+export const usePlayableHands = () => useCardStore((s) => s.playableHands);
+export const useDiscards = () => useCardStore((s) => s.discards);
 
 export const useCardActions = () => useCardStore((s) => s.actions);
