@@ -12,9 +12,7 @@ export function Deck() {
           backgroundImage: `url(${cardBack})`,
         }}
       />
-      <p className="mt-2 text-center font-bold text-white">
-        Cards left : {deck.length}/52
-      </p>
+      <p className="mt-2 text-center font-bold text-white">{deck.length}/52</p>
     </div>
   );
 }
