@@ -58,9 +58,9 @@ export const useCardStore = create<CardState>()((set, get) => ({
       set({ deck: rest, hand: [...hand, card] });
     },
     fillHand: () => {
-      const { hand } = get();
+      const { hand, deck } = get();
 
-      if (hand.length < 8) {
+      if (hand.length < 8 && deck.length > 0) {
         get().actions.drawCard();
         get().actions.fillHand();
       }
