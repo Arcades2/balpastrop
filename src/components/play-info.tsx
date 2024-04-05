@@ -16,15 +16,15 @@ export function PlayInfo({ containerClassName }: PlayInfoProps) {
         containerClassName,
       )}
     >
-      <div className="text-white p-2 flex flex-col gap-2 w-[100px]">
-        <div>Hands</div>
-        <div className="rounded bg-opacity-80 bg-zinc-800 p-2 text-blue-500 font-bold text-2xl">
+      <div className="text-white p-2 flex flex-col gap-2 w-[120px]">
+        <div className="text-2xl">Hands</div>
+        <div className="rounded bg-opacity-80 bg-zinc-800 p-2 text-blue-500 font-bold text-3xl">
           {playableHands}
         </div>
       </div>
-      <div className="text-white p-2 flex flex-col gap-2 w-[100px]">
-        <div>Discards</div>
-        <div className="rounded bg-opacity-80 bg-zinc-800 p-2 text-red-500 font-bold text-2xl">
+      <div className="text-white p-2 flex flex-col gap-2 w-[120px]">
+        <div className="text-2xl">Discards</div>
+        <div className="rounded bg-opacity-80 bg-zinc-800 p-2 text-red-500 font-bold text-3xl">
           {discards}
         </div>
       </div>

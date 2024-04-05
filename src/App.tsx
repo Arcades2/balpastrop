@@ -19,11 +19,13 @@ function App() {
         <div className="h-1/2 flex items-center justify-center relative">
           <div className="absolute top-1/2 -translate-y-1/2 left-0">
             <Score />
-            <PlayInfo containerClassName="mt-8" />
           </div>
           <PlayedCards />
         </div>
         <div className="h-1/2 flex flex-col justify-center gap-16 relative">
+          <div className="absolute top-1/2 -translate-y-1/2 left-0">
+            <PlayInfo containerClassName="mt-8" />
+          </div>
           <Hand />
           <div className="flex justify-center items-center gap-6">
             <Buttons />
